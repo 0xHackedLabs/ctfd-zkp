@@ -1,0 +1,80 @@
+<link rel="stylesheet" type="text/css" href="{{ script_root }}/plugins/ctf_0xhacked/assets/flag/css/codemirror.min.css">
+
+<div class="form-group">
+	<label>ETH RPC URL</label>
+	<input type="text" class="form-control" id="eth_rpc_url">
+</div>
+
+<div class="form-group">
+	<label>BLOCK NUMBER</label>
+	<input type="number" class="form-control" id="block_number">
+</div>
+
+<div class="form-group">
+	<label>Setup Contract</label>
+	<input type="text" class="form-control" id="setup_contract">
+</div>
+
+<div class="form-group">
+	<div class="alert alert-secondary" role="alert">
+		<p>
+			A check function is a Python3 function taking two arguments(info and zk proof). The function should then return a Boolean
+			indicating
+			whether the user was correct or not.
+		</p>
+		<p>Example:</p>
+		<pre><code>def check(info, proof):
+    return True
+
+</code></pre>
+	</div>
+</div>
+
+<label class="control-label">Enter Code:</label>
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-group">
+			<label for="key">Check Function</label>
+			<textarea id="new-key-check-editor" class="hide" name="content" width="100%"></textarea>
+		</div>
+
+		<div class="form-group">
+			<input type="hidden" name="type" value="zkp">
+		</div>
+		<div class="form-group">
+			<input type="hidden" id ="data" name="data" value="">
+		</div>
+	</div>
+</div>
+
+<script>
+    if (CTFd.lib.$) {
+        $ = CTFd.lib.$;
+    }
+    var check_editor = null;
+    $.getScript("{{ script_root }}/plugins/ctf_0xhacked/assets/flag/js/codemirror.min.js", function(){
+        check_editor = CodeMirror.fromTextArea(document.getElementById("new-key-check-editor"), {
+            lineNumbers: true,
+            lineWrapping: true,
+            styleActiveLine: true,
+            autoRefresh: true,
+            theme: 'elegant',
+			mode: 'python',
+        });
+
+        check_editor.on('change', function () {
+            check_editor.save();
+        });
+    });
+	$('#eth_rpc_url, #block_number, #setup_contract').on('input', function() {
+		var rpcUrl = $('#eth_rpc_url').val();
+		var blockNumber = $('#block_number').val();
+		var setupContract = $('#setup_contract').val();
+		var jsonData = {
+			eth_rpc_url: rpcUrl,
+			block_number: blockNumber,
+			setup_contract: setupContract,
+		};
+		$('#data').val(JSON.stringify(jsonData));
+	})
+</script>

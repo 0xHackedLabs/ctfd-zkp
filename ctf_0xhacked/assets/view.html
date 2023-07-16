@@ -1,0 +1,7 @@
+{% extends "challenge.html" %}
+
+{% block input %}
+	<input id="challenge-id" class="challenge-id" type="hidden" value="{{ challenge.id }}">
+    <label for="zk_proof">zk proof file input</label>
+    <input class="form-control-file" id="zk_proof"  type='file' >
+{% endblock %}

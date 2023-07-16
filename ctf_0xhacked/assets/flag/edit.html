@@ -1,0 +1,78 @@
+<link rel="stylesheet" type="text/css" href="{{ script_root }}/plugins/ctf_0xhacked/assets/flag/css/codemirror.min.css">
+
+
+<div class="form-group">
+	<label>ETH RPC URL</label>
+	<input type="text" class="form-control" id="eth_rpc_url" value="">
+</div>
+
+<div class="form-group">
+	<label>BLOCK NUMBER</label>
+	<input type="number" class="form-control" id="block_number" value="">
+</div>
+
+<div class="form-group">
+	<label>Setup Contract</label>
+	<input type="text" class="form-control" id="setup_contract">
+</div>
+
+
+<label>
+	Check Function<br>
+	<small>Function used to validate the user's submission (e.g. <code>def check(info, proof)</code>)</small>
+</label>
+<textarea id="key-check-update-editor" class="hide" name="content">{{ content }}</textarea>
+<div class="row">
+	<div class="col-md-12">
+		<input type="hidden" id="id" value="{{ id }}">
+		<input type="hidden" id="type" value="zkp">
+		<input type="hidden" id="data" name="data" value="">
+		<div class="form-group">
+			<button id="submit-keys" class="btn btn-success float-right">Update</button>
+		</div>
+	</div>
+</div>
+<script>
+	if (CTFd.lib.$) {
+		$ = CTFd.lib.$;
+	}
+	var check_editor = null;
+
+	$.getScript("{{ script_root }}/plugins/ctf_0xhacked/assets/flag/js/codemirror.min.js", function () {
+		if (check_editor == null) {
+			check_editor = CodeMirror.fromTextArea(document.getElementById("key-check-update-editor"), {
+				lineNumbers: true,
+				lineWrapping: true,
+				styleActiveLine: true,
+				autoRefresh: true,
+				theme: 'elegant'
+			});
+			check_editor.refresh();
+		}
+
+		check_editor.on('change', function () {
+			check_editor.save();
+		});
+
+		setTimeout(function () {
+			check_editor.refresh();
+		}, 100);
+	});
+	var initdata = {{ data|safe }};
+	$('#eth_rpc_url').val(initdata.eth_rpc_url);
+	$('#block_number').val(initdata.block_number);
+	$('#setup_contract').val(initdata.setup_contract);
+	$('#data').val(JSON.stringify(initdata));
+
+	$('#eth_rpc_url, #block_number').on('input', function() {
+		var rpcUrl = $('#eth_rpc_url').val();
+		var blockNumber = $('#block_number').val();
+		var setupContract = $('#setup_contract').val();
+		var jsonData = {
+			eth_rpc_url: rpcUrl,
+			block_number: blockNumber,
+			setup_contract: setupContract,
+		};
+		$('#data').val(JSON.stringify(jsonData));
+	})
+</script>
