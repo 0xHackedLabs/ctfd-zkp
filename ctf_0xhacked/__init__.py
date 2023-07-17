@@ -193,6 +193,7 @@ class ZKPFlag:
 
 
 def load(app):
+    app.db.create_all()
     FLAG_CLASSES[ZKPFlag.name] = ZKPFlag
     CHALLENGE_CLASSES[ZKPChallenge.name] = ZKPChallenge
     register_plugin_assets_directory(app, base_path="/plugins/ctf_0xhacked/assets/")

@@ -129,7 +129,6 @@ def main():
 
     print()
     print(f"your private blockchain has been deployed")
-    print(f"it will automatically terminate in 30 minutes")
     print(f"here's some useful information")
     print(f"rpc endpoint:   http://{PUBLIC_IP}:{HTTP_PORT}")
     print(f"setup contract: {setup_addr}")
